@@ -1,0 +1,109 @@
+import random # import the random feature
+playerCards = [] # create a list for the players hand
+cpuCards = [] # create a list for the CPU hand
+
+playerstwos = 0 # create a variable for the pairs for the player
+cputwos = 0 # create a variable for the pairs for the CPU
+
+cardDeck = ["King","Queen","Ace","Joker","Jack",1,2,3,4,5,6,7,8,9,10,"King","Queen","Ace","Joker","Jack",1,2,3,4,5,6,7,8,9,10,] # create a card deck
+
+def checkHands(card,hand): # make a function to check the hands at the beggining of the game to ensure there are no duplicates
+    if card in hand:
+        return 1
+    else:
+        return 0
+
+random.shuffle(cardDeck) # shuffle the card deck
+
+name = input("Welcome, What Is You're Name, Fisherman?:") # welcome the player
+print("Welcome To Go Fish",name,"!")
+
+
+
+for x in range(7): # distribute cards
+    card = cardDeck.pop()
+    
+    if checkHands(card,playerCards) > 0: # if there was a duplicate then add it to the pairs
+        playerstwos += 1
+        print("You Got A Duplicate From The Dealer")
+        print("Your Pairs:",playerstwos)
+        print("CPU Pairs",cputwos)
+    playerCards.append(card)
+    
+print("The Cards That You Got Were:",playerCards)     # tell the player their cards
+
+for i in range(7): # distribute cards
+    card = cardDeck.pop()
+    
+    if checkHands(card,cpuCards) > 0: # check the cpu hand for duplicates at the beggining of the game and add it to the pairs variable
+        cputwos += 1
+        print("The CPU Got A Duplicate From The Dealer")
+        print("Your Pairs:",playerstwos)
+        print("CPU Pairs:",cputwos)
+    
+    cpuCards.append(card)
+
+
+while True: # while the card deck is greater than zero
+    while len(cardDeck > 0):
+    
+        whatCard = input("What Card Would You Like?:") # ask the user what card they would like
+
+        if whatCard in cpuCards: # if the card is in the cpu cards then add a score to their pairs 
+           print("Nice!")
+           cpuCards.remove(whatCard)
+           playerCards.remove(whatCard)
+           playerstwos += 1
+           print("You Now Have",playerstwos,"Duplicates In Your Hand")
+           print("Computer Pairs:",cputwos)
+           print("Your Updated Cards:",playerCards)
+        
+        else:
+            print("Go Fish!") # if not make them go fish and have to draw a card from the deck
+
+            goFish = random.choice(cardDeck)
+
+            if goFish in playerCards:
+                playerstwos += 1
+                playerCards.remove(goFish)
+                print("You Got A Pair From Drawing")
+                print("Your Pairs:",playerstwos)
+                print("CPU Pairs",cputwos)
+            
+            print("You Drew A",goFish,"From The Deck")
+            playerCards.append(goFish)
+            cardDeck.remove(goFish)
+            print("Your Cards:",playerCards)
+
+
+        cpuGuess = random.choice(cpuCards) # make the cpu guess a card for a pair
+
+        if cpuGuess in playerCards: # if the cpu was right then award it with a added variable 
+            print("The Computer Got A Pair From Guessing")
+            cpuCards.remove(cpuGuess)
+            playerCards.remove(cpuGuess)
+            cputwos += 1
+            print("Computer Pairs",cputwos)
+            print("Your Pairs:",playerstwos)
+            print("Your Cards",playerCards)
+
+        else: # if not then make it go fish and add a card to the list
+            print("The Computer Has To Go Fishing")
+            cpuFishing = random.choice(cardDeck)
+            if cpuFishing in cpuCards:#If it already had that card then give it a pair
+                print("The Computer Got A Pair From Going Fishing")
+                cputwos += 1
+                cpuCards.remove(cpuFishing)
+                cpuCards.remove(cpuFishing)
+                # print the computers pairs
+                # print the users pairs
+                # print the cards that the user has
+
+    
+    break
+
+
+if playerstwos > cputwos:
+    print("You Won, Congrats!")
+else:
+    print("The Computer Won, Better Luck Next Time")
